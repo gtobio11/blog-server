@@ -1,13 +1,17 @@
-import * as express from 'express';
-import * as cors from 'cors';
-import fs from 'fs';
+const express = require('express');
+const cors = require('cors');
+const fs = require('fs');
 
 const app = express();
 
+app.use(cors());
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
+app.engine('html', require('ejs').renderFile);
+
 const server = app.listen(8080, function(){
-    console.log('server on');
+    console.log('server on 8080 port');
 })
 
-app.use(cors());
 
-const router = require('./router/main')(app, fs);
+const router = require('./router')(app, fs);
