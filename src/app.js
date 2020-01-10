@@ -5,6 +5,7 @@ const fs = require('fs');
 const app = express();
 
 app.use(cors());
+app.use(express.json());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);

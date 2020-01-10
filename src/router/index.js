@@ -33,7 +33,7 @@ module.exports = function(app, fs) {
                 }];
                 
             
-                fs.write(
+                fs.writeFile(
                     __dirname + '/../data/posts.json', 
                     JSON.stringify(postsData, null, "\t"),
                     "utf-8",

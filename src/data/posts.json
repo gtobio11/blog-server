@@ -1,12 +1,17 @@
 [
-    {
-        "title": "post title",
-        "description": "post description",
-        "category": "free"
-    },
-    {
-        "title": "post2 title",
-        "description": "post2 description",
-        "category": "ex"
-    }
+	{
+		"title": "post title",
+		"description": "post description",
+		"category": "free"
+	},
+	{
+		"title": "post2 title",
+		"description": "post2 description",
+		"category": "ex"
+	},
+	{
+		"title": "MAKE POST TEST",
+		"description": "MAKE POST DESCRIPTION TEST",
+		"category": "free"
+	}
 ]
