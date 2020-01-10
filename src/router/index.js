@@ -29,8 +29,10 @@ module.exports = function(app, fs) {
             let postsData = JSON.parse(readData);
             const { title, description, category = "" } = req.body;
             if(title && description){
+                let postId = 0;
+                if(postsData.length !== 0) postId = postsData[postsData.length - 1].postId + 1;
                 postsData = [...postsData, {
-                    postId: postsData.length,
+                    postId: postId,
                     date : dateFormat(new Date),
                     title, 
                     description, 
