@@ -1,16 +1,1 @@
-[
-	{
-		"postId": 0,
-		"date": "2010.01.10 15:43",
-		"title": "MAKE POST TEST1",
-		"description": "MAKE POST DESCRIPTION TEST1",
-		"category": "free"
-	},
-	{
-		"postId": 1,
-		"date": "2010.01.10 15:43",
-		"title": "MAKE POST TEST2",
-		"description": "MAKE POST DESCRIPTION TEST2",
-		"category": "free"
-	}
-]
+[]
