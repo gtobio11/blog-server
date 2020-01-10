@@ -1,3 +1,6 @@
+const dateFormat = require('../util/dateFormat');
+const zeroFormat = require('../util/zeroFormat');
+
 module.exports = function(app, fs) {
     app.get("/", function(req, res) {
         res.render("index.html")
@@ -27,6 +30,8 @@ module.exports = function(app, fs) {
             const { title, description, category = "" } = req.body;
             if(title && description){
                 postsData = [...postsData, {
+                    postId: postsData.length,
+                    date : dateFormat(new Date),
                     title, 
                     description, 
                     category

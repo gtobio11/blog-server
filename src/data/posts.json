@@ -1,17 +1,16 @@
 [
 	{
-		"title": "post title",
-		"description": "post description",
-		"category": "free"
+		"postId": 0,
+		"date": "2010.01.10 15:37",
+		"title": "MAKE POST TEST1",
+		"description": "MAKE POST DESCRIPTION TEST1",
+		"category": "free1"
 	},
 	{
-		"title": "post2 title",
-		"description": "post2 description",
-		"category": "ex"
-	},
-	{
-		"title": "MAKE POST TEST",
-		"description": "MAKE POST DESCRIPTION TEST",
-		"category": "free"
+		"postId": 1,
+		"date": "2010.01.10 15:37",
+		"title": "MAKE POST TEST2",
+		"description": "MAKE POST DESCRIPTION TEST1",
+		"category": "free1"
 	}
 ]
