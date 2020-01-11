@@ -83,18 +83,73 @@ module.exports = function(app, fs) {
                         __dirname + '/../data/posts.json', 
                         JSON.stringify(postsData, null, "\t"),
                         "utf-8",
-                        function(writeErr, writeData){
+                        function(writeErr, writeData) {
                             if(writeErr) {
                                 console.log(writeErr);
                                 res.status(500).send();
                             }
                             res.status(200).send(postsData);
-                        })
+                        }
+                    )
                 }
             })
         }
         else {
             res.status(400).send();
+        }
+    })
+
+    app.patch("/patchPost/:postId", function(req, res) {
+        if(req.params.postId) {
+            const willPatchPostId = parseInt(req.params.postId);
+            fs.readFile(__dirname + "/../data/posts.json", "utf-8", function(readErr, readData) {
+                let postsData = JSON.parse(readData);
+                const willPatchPostDataIdx = postsData.findIndex(postData => postData.postId === willPatchPostId);
+                if(willPatchPostDataIdx === -1) {
+                    res.status(404).send({message: "Nonexistent PostId"});
+                } else {
+                    const { title, description, category } = req.body;
+
+                    if(willPatchPostDataIdx !== 0){
+                        postsData = [...postsData.slice(0, willPatchPostDataIdx), 
+                            {
+                                postId: postsData[willPatchPostDataIdx].postId,
+                                date: postsData[willPatchPostDataIdx].date,
+                                title: title || postsData[willPatchPostDataIdx].title,
+                                description: description || postsData[willPatchPostDataIdx].description,
+                                category: category || postsData[willPatchPostDataIdx].category
+                            },
+                            ...postsData.slice(willPatchPostDataIdx + 1)
+                        ]
+                    } else {
+                        postsData = [ 
+                            {
+                                postId: postsData[willPatchPostDataIdx].postId,
+                                date: postsData[willPatchPostDataIdx].date,
+                                title: title || postsData[willPatchPostDataIdx].title,
+                                description: description || postsData[willPatchPostDataIdx].description,
+                                category: category || postsData[willPatchPostDataIdx].category
+                            },
+                            ...postsData.slice(1)
+                        ]
+                    }
+
+                    fs.writeFile(
+                        __dirname + "/../data/posts.json",
+                        JSON.stringify(postsData, null, "\t"),
+                        "utf-8",
+                        function(writeErr, writeData) {
+                            if(writeErr) {
+                                console.log(writeErr);
+                                res.status(500).send();
+                            }
+                            res.status(200).send(postsData);
+                        }
+                    )
+                }
+            })
+        } else {
+            res.status(404).send({message: "Nonexistent PostId"})
         }
     })
 }
