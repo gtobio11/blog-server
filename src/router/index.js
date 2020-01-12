@@ -37,7 +37,8 @@ module.exports = function(app, fs) {
                     date : dateFormat(new Date),
                     title, 
                     description, 
-                    category
+                    category,
+                    reply: []
                 }];
                 
             
@@ -117,7 +118,8 @@ module.exports = function(app, fs) {
                                 date: postsData[willPatchPostDataIdx].date,
                                 title: title || postsData[willPatchPostDataIdx].title,
                                 description: description || postsData[willPatchPostDataIdx].description,
-                                category: category || postsData[willPatchPostDataIdx].category
+                                category: category || postsData[willPatchPostDataIdx].category,
+                                reply: postsData[willPatchPostDataIdx].reply
                             },
                             ...postsData.slice(willPatchPostDataIdx + 1)
                         ]
@@ -128,7 +130,9 @@ module.exports = function(app, fs) {
                                 date: postsData[willPatchPostDataIdx].date,
                                 title: title || postsData[willPatchPostDataIdx].title,
                                 description: description || postsData[willPatchPostDataIdx].description,
-                                category: category || postsData[willPatchPostDataIdx].category
+                                category: category || postsData[willPatchPostDataIdx].category,
+                                reply: postsData[willPatchPostDataIdx].reply
+
                             },
                             ...postsData.slice(1)
                         ]
@@ -150,6 +154,54 @@ module.exports = function(app, fs) {
             })
         } else {
             res.status(404).send({message: "Nonexistent PostId"})
+        }
+    })
+
+    app.post("/addReply/:postId", function(req, res){
+        const { postId } = req.params;
+        const willAddReplyPostId = parseInt(postId);
+        const { email, description} = req.body; 
+        if(willAddReplyPostId && email && description) {
+            fs.readFile(__dirname + '/../data/posts.json', "utf-8", function(readErr, readData) {
+                let postsData = JSON.parse(readData);
+                let replyId = 1;
+                const postId = postsData.findIndex(postData => postData.postId === willAddReplyPostId);
+                if(postId === -1) {
+                    res.status(404).send({ message: "Nonexistent PostId" });
+                } else{
+                    const willAddReplyPost = postsData[postId];
+                    if(postsData[postId].reply.length !== 0) 
+                        replyId = postsData[postId].reply[postsData[postId].reply.length - 1].replyId + 1;
+
+                    
+                    const addedReply = [
+                        ...willAddReplyPost.reply,
+                        {
+                            replyId: replyId,
+                            date : dateFormat(new Date),
+                            description,
+                            email
+                        }
+                    ]
+                    
+                    willAddReplyPost.reply = addedReply
+                
+                    fs.writeFile(
+                        __dirname + '/../data/posts.json', 
+                        JSON.stringify(postsData, null, "\t"),
+                        "utf-8",
+                        function(writeErr, writeData){
+                            if(writeErr) {
+                                console.log(writeErr);
+                                res.status(500).send();
+                            }
+                            res.status(201).send(postsData);
+                        }
+                    )
+                }
+            })
+        } else {
+            res.status(404).send({message: "Nonexistent PostId"});
         }
     })
 }
