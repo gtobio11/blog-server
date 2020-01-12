@@ -204,4 +204,41 @@ module.exports = function(app, fs) {
             res.status(404).send({message: "Nonexistent PostId"});
         }
     })
+
+    app.delete("/deleteReply/:postId", function(req, res) {
+        const { postId } = req.params;
+        const { replyId } = req.body;
+        const willDeleteReplyPostId = parseInt(postId);
+        const willDeleteReplyId = parseInt(replyId);
+        if(willDeleteReplyPostId && willDeleteReplyId) {
+            fs.readFile(__dirname + '/../data/posts.json', "utf-8", function(readErr, readData) {
+                let postsData = JSON.parse(readData);
+                const postId = postsData.findIndex(postData => postData.postId === willDeleteReplyPostId);
+                if(postId === -1) {
+                    res.status(404).send({ message: "Nonexistent PostId or ReplyId" });
+                } else{
+                    const willDeleteReplyPost = postsData[postId];
+                    
+                    const deletedReply = willDeleteReplyPost.reply.filter(replyData => replyData.replyId !== willDeleteReplyId);
+                    
+                    willDeleteReplyPost.reply = deletedReply
+                
+                    fs.writeFile(
+                        __dirname + '/../data/posts.json', 
+                        JSON.stringify(postsData, null, "\t"),
+                        "utf-8",
+                        function(writeErr, writeData){
+                            if(writeErr) {
+                                console.log(writeErr);
+                                res.status(500).send();
+                            }
+                            res.status(200).send(postsData);
+                        }
+                    )
+                }
+            })
+        } else {
+            res.status(404).send({ message: "Nonexistent PostId or ReplyId" });
+        }
+    })
 }
