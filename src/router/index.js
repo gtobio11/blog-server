@@ -6,6 +6,13 @@ module.exports = function(app, fs) {
         res.render("index.html")
     })
 
+    app.get("/getCategories", function(req, res) {
+        fs.readFile(__dirname + "/../data/categories.json", "utf-8", function(err, data) {
+            const categories = JSON.parse(data);
+            res.send(categories);
+        })
+    })
+
     app.get("/getPosts", function(req, res) {
         fs.readFile(__dirname + "/../data/posts.json", "utf-8", function(err, data) {
             let postsData = JSON.parse(data);
