@@ -9,25 +9,24 @@ module.exports = function(app, fs) {
     app.get("/getCategories", function(req, res) {
         fs.readFile(__dirname + "/../data/categories.json", "utf-8", function(err, data) {
             const categories = JSON.parse(data);
-            res.send(categories);
+            res.status(200).send(categories);
         })
     })
 
     app.get("/getPosts", function(req, res) {
         fs.readFile(__dirname + "/../data/posts.json", "utf-8", function(err, data) {
             let postsData = JSON.parse(data);
-            res.send(postsData);
+            res.status(200).send(postsData);
         })
     });
 
     app.get("/getPosts/:category", function(req, res) {
         fs.readFile(__dirname + "/../data/posts.json", "utf-8", function(err, data) {
             let postsData = JSON.parse(data);
-            console.log(req.params.category);
             if(req.params.category) {
                 postsData = postsData.filter(post => post.category === req.params.category)
             }
-            res.send(postsData);
+            res.status(200).send(postsData);
         })
     });
 
